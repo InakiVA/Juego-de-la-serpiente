@@ -5,7 +5,6 @@ Exercises
 1. How do you make the snake faster or slower?-Edrick
 2. How can you make the snake go around the edges?-Iñaki
 3. How would you move the food?-Iñaki
-4. Change the snake to respond to mouse clicks.
 """
 import random
 from random import randrange
