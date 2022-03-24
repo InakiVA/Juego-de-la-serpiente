@@ -7,7 +7,7 @@ Exercises
 3. How would you move the food?
 4. Change the snake to respond to mouse clicks.
 """
-
+import random
 from random import randrange
 from turtle import *
 
@@ -16,29 +16,42 @@ from freegames import square, vector
 food = vector(0, 0)
 snake = [vector(10, 0)]
 aim = vector(0, -10)
-
+colors=['black','green','blue','yellow','pink']#selección de colores de comida y serpiente
+rSnake=random.randint(0,len(colors)-1)
+cSnake=colors[rSnake]
+del colors[rSnake]
+rFood=random.randint(0,len(colors)-1)
+cFood=colors[rFood]
 
 def change(x, y):
     """Change snake direction."""
     aim.x = x
     aim.y = y
 
-
-def inside(head):
+#debemos eliminar este método para que se pueda mover en las orillas
+'''def inside(head):
     """Return True if head inside boundaries."""
-    return -200 < head.x < 190 and -200 < head.y < 190
-
+    return -200 < head.x < 190 and -200 < head.y < 190'''
 
 def move():
     """Move snake forward one segment."""
     head = snake[-1].copy()
     head.move(aim)
 
-    if not inside(head) or head in snake:
+    if head in snake:#quite el condicional de bordes
         square(head.x, head.y, 9, 'red')
         update()
         return
-
+    #puede ir en el contorno, y se traspasa al otro lado del mapa
+    if head.x<-200:
+        head.x=190
+    elif head.x>190:
+        head.x=-200
+    if head.y<-200:
+        head.y=190
+    elif head.y>190:
+        head.y=-200
+        
     snake.append(head)
 
     if head == food:
@@ -51,11 +64,29 @@ def move():
     clear()
 
     for body in snake:
-        square(body.x, body.y, 9, 'black')
+        square(body.x, body.y, 9, 'cSnake')
 
-    square(food.x, food.y, 9, 'green')
+    square(food.x, food.y, 9, 'cFood')
+    
+    pFood=[10,-10]#mover comida------------------
+    r1F=random.randint(0,1)#eje x y
+    r2F=random.randint(0,1)#arriba/abajo, derecha/izquierda
+    if r1F==0 and food.x>=-190 and food.x<=180: #condiciones de bordes
+        food.x+=pFood[r2F]
+    elif r1F==0 and food.x<-190:
+        food.x=-190
+    elif r1F==0 and food.x>180:
+        food.x=180
+    if r1F==1 and food.y>=-190 and food.y<=180:
+        food.y+=pFood[r2F]
+    elif r1F==1 and food.y<-190:
+        food.y=-190
+    elif r1F==1 and food.y>180:
+        food.y=180   
+    #---------------------mover comida
+    
     update()
-    ontimer(move, 300)"""Aquí se le cambia la velocidad a la serpiente"""
+    ontimer(move, 150)"""Aquí se le cambia la velocidad a la serpiente, entre mayor, menor velocidad"""
 
 
 setup(420, 420, 370, 0)
